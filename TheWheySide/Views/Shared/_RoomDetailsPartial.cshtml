@@ -1,0 +1,65 @@
+﻿@model IEnumerable<TheWheySide.ViewModel.RoomDetailsViewModel>
+
+<table>
+    <thead>
+        <tr>
+            <th>
+                Actions
+            </th>
+            <th>
+                Room Image.
+            </th>
+            <th>
+                Room No.
+            </th>
+            <th>
+                Room Price
+            </th>
+            <th>
+                Booking Status
+            </th>
+            <th>
+                Room Type
+            </th>
+            <th>
+                Room Capacity
+            </th>
+            <th>
+                Room Description
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+
+                </td>
+                <td>
+                    <img src="@Url.Content("~/Images/" + item.RoomImage)" width="30" height="30" class="img-responsive" />
+                </td>
+                <td>
+                    @item.RoomNumber
+                </td>
+                <td>
+                    @item.RoomPrice
+                </td>
+                <td>
+                    @item.BookingStatus
+                </td>
+                <td>
+                    @item.RoomType
+                </td>
+                <td>
+                    @item.RoomCapacity
+                </td>
+                <td>
+                    @item.RoomDescription
+                </td>
+
+            </tr>   
+        }
+    </tbody>
+    
+</table>

@@ -1,0 +1,118 @@
+﻿@model TheWheySide.ViewModel.RoomViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<script src="~/Scripts/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnSave").click(function () {
+            SaveRoomData();
+        });
+    });
+
+    function SaveRoomData() {
+        var formData = new FormData;
+        formData.append("RoomNumber", $("#txtRoomNumber").val());
+        formData.append("RoomPrice", $("#txtRoomPrice").val());
+        formData.append("BookingStatusId", $("#ddBookingStatus").val());
+        formData.append("RoomTypeId", $("#ddRoomType").val());
+        formData.append("RoomCapacity", $("#txtRoomCapacity").val());
+        formData.append("RoomDescription", $("#txtRoomDescription").val());
+        formData.append("Image", $("#UploadImage").get(0).files[0]);
+
+        $.ajax({
+            async: true,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (data) {
+                if (data.success === true) {
+                    alert(data.message);
+                    ResetRoomFields();
+                }
+            },
+            error: function () {
+                alert('There is some error to process your data. Kinfly contact Adminstrartor');
+            }
+
+        })
+    }
+
+    function ResetRoomFields() {
+        $("#txtRoomNumber").val('');
+        $("#txtRoomPrice").val('');
+        $("#ddBookingStatus").val('');
+        $("#ddRoomType").val('');
+        $("#txtRoomCapacity").val('');
+        $("#txtRoomDescription").val('');
+        $("#UploadImage").val('');
+        $("#txtRoomNumber").focus();
+        $("#imgRoom").removeAttr('src');
+
+
+    }
+
+    function DisplayImage(result) {
+        if (result.files && result.files[0]) {
+            var fileReader = new FileReader();
+            fileReader.onload = function(e) {
+                $("#imgRoom").attr('src', e.target.result);
+            }
+            fileReader.readAsDataURL(result.files[0]);
+        }
+    }
+</script>
+
+
+<div style="margin-top:50px">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#divAddRoom" data-backdrop="static" data-keyboard="false">Add Room</button>
+</div>
+
+<div id="divAddRoom" class="modal fade" role="dialog" >
+    <div class="modal-dialog" >
+        <div class="modal-content" >
+            <div class="modal-header" style="width:fit-content">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="width:fit-content">Room</h4>
+            </div>
+            <div class="modal-body" style="width:fit-content">
+                <div class="container" style="width:fit-content">
+                    <div class="form-group col-md-6" >
+                        @Html.LabelFor(model => model.RoomNumber)
+                        @Html.TextBoxFor(model => model.RoomNumber, htmlAttributes: new { @class = "form-control",id="txtRoomNumber" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.RoomPrice)
+                        @Html.TextBoxFor(model => model.RoomPrice, htmlAttributes: new { @class = "form-control", id = "txtRoomPrice" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.BookingStatusId)
+                        @Html.DropDownListFor(model => model.BookingStatusId, Model.ListOfBookingSatus, htmlAttributes: new { @class = "form-control", id = "ddBookingStatus" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.RoomTypeId)
+                        @Html.DropDownListFor(model => model.RoomTypeId, Model.ListOfRoomType, htmlAttributes: new { @class = "form-control", id = "ddRoomType" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.RoomCapacity)
+                        @Html.TextBoxFor(model => model.RoomCapacity, htmlAttributes: new { @class = "form-control", id = "txtRoomCapacity" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.RoomDescription)
+                        @Html.TextBoxFor(model => model.RoomDescription, htmlAttributes: new { @class = "form-control", id = "txtRoomDescription" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.RoomImage)
+                        <input id="UploadImage" type="file" class="form-control" name="roomImage" title="Load Image" onchange="DisplayImage(this)" />
+                        <img id="imgRoom" height="200" width="200" style="border:solid" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnSave" type="button" class="btn btn-success">Save</button> &nbsp;
+                <button type="button" data-dismiss="modal" class="btn btn-danger">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
